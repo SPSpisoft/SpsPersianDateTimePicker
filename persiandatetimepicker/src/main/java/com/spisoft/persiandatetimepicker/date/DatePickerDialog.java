@@ -54,7 +54,7 @@ import java.util.HashSet;
  * Dialog allowing users to select a date.
  */
 public class DatePickerDialog extends DialogFragment implements
-  OnClickListener, DatePickerController {
+        OnClickListener, DatePickerController {
 
   private static final String TAG = "DatePickerDialog";
 
@@ -78,7 +78,7 @@ public class DatePickerDialog extends DialogFragment implements
   private static final String KEY_THEME_DARK = "theme_dark";
   private static final String KEY_FONT_NAME = "font_name";
 
-  private static final int DEFAULT_START_YEAR = 1350;
+  private static final int DEFAULT_START_YEAR = 1300;
   private static final int DEFAULT_END_YEAR = 1450;
 
   private static final int ANIMATION_DURATION = 300;
@@ -137,7 +137,9 @@ public class DatePickerDialog extends DialogFragment implements
      */
     void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth);
 
-      void onDateSet(DatePicker view, int year, int month, int dayOfMonth);
+    void onDateSet(DatePickerDialog view, String year, String monthOfYear, String dayOfMonth);
+
+    void onDateSet(DatePicker view, int year, int month, int dayOfMonth);
   }
 
   /**
@@ -178,12 +180,12 @@ public class DatePickerDialog extends DialogFragment implements
     super.onCreate(savedInstanceState);
     final Activity activity = getActivity();
     activity.getWindow().setSoftInputMode(
-      WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+            WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     if (savedInstanceState != null) {
       mPersianCalendar.setPersianDate(
-        savedInstanceState.getInt(KEY_SELECTED_YEAR),
-        savedInstanceState.getInt(KEY_SELECTED_MONTH),
-        savedInstanceState.getInt(KEY_SELECTED_DAY)
+              savedInstanceState.getInt(KEY_SELECTED_YEAR),
+              savedInstanceState.getInt(KEY_SELECTED_MONTH),
+              savedInstanceState.getInt(KEY_SELECTED_DAY)
       );
     }
   }
@@ -229,6 +231,8 @@ public class DatePickerDialog extends DialogFragment implements
     mYearView = view.findViewById(R.id.date_picker_year);
     Button okButton = view.findViewById(R.id.ok);
     Button cancelButton = view.findViewById(R.id.cancel);
+    Button todayButton = view.findViewById(R.id.today);
+    todayButton.setTypeface(TypefaceHelper.get(activity, fontName));
     okButton.setTypeface(TypefaceHelper.get(activity, fontName));
     cancelButton.setTypeface(TypefaceHelper.get(activity, fontName));
     if (mDayOfWeekTextView != null) {
@@ -287,10 +291,32 @@ public class DatePickerDialog extends DialogFragment implements
       public void onClick(View v) {
         tryVibrate();
         if (mCallBack != null) {
-          mCallBack.onDateSet(DatePickerDialog.this, mPersianCalendar.getPersianYear(),
-            mPersianCalendar.getPersianMonth(), mPersianCalendar.getPersianDay());
+//          mCallBack.onDateSet(DatePickerDialog.this, mPersianCalendar.getPersianYear(),
+//                  mPersianCalendar.getPersianMonth(), mPersianCalendar.getPersianDay());
+
+          mCallBack.onDateSet(DatePickerDialog.this, Padl(mPersianCalendar.getPersianYear(), 4, '0'),
+                  Padl(mPersianCalendar.getPersianMonth()+1,2,'0'), Padl(mPersianCalendar.getPersianDay(),2,'0'));
         }
         dismiss();
+      }
+
+      public String Padl(int val, Integer len, char chr ) {
+        String txt = String.valueOf(val);
+        String _txt = txt.trim();
+        while (_txt.length() < len){
+          _txt =  chr+_txt;
+        }
+        return _txt;
+      }
+    });
+
+    todayButton.setOnClickListener(new OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        PersianCalendar persianCal = new PersianCalendar();
+        MonthAdapter.CalendarDay day = new MonthAdapter.CalendarDay();
+        day.setDay(persianCal.getPersianYear(),persianCal.getPersianMonth(),persianCal.getPersianDay());
+        mDayPickerView.goTo(day,false,true,true);
       }
     });
 
@@ -352,7 +378,7 @@ public class DatePickerDialog extends DialogFragment implements
     switch (viewIndex) {
       case MONTH_AND_DAY_VIEW:
         ObjectAnimator pulseAnimator = Utils.getPulseAnimator(mMonthAndDayView, 0.9f,
-          1.05f);
+                1.05f);
         if (mDelayAnimation) {
           pulseAnimator.setStartDelay(ANIMATION_DELAY);
           mDelayAnimation = false;
@@ -386,7 +412,7 @@ public class DatePickerDialog extends DialogFragment implements
         pulseAnimator.start();
 
         String yearString = LanguageUtils.
-          getPersianNumbers(String.valueOf(mPersianCalendar.getPersianYear()));
+                getPersianNumbers(String.valueOf(mPersianCalendar.getPersianYear()));
         mAnimator.setContentDescription(mYearPickerDescription + ": " + yearString);
         Utils.tryAccessibilityAnnounce(mAnimator, mSelectYear);
         break;
@@ -399,24 +425,24 @@ public class DatePickerDialog extends DialogFragment implements
     }
 
     mSelectedMonthTextView.setText(LanguageUtils.
-      getPersianNumbers(mPersianCalendar.getPersianMonthName()));
+            getPersianNumbers(mPersianCalendar.getPersianMonthName()));
     mSelectedDayTextView.setText(LanguageUtils.
-      getPersianNumbers(String.valueOf(mPersianCalendar.getPersianDay())));
+            getPersianNumbers(String.valueOf(mPersianCalendar.getPersianDay())));
     mYearView.setText(LanguageUtils.
-      getPersianNumbers(String.valueOf(mPersianCalendar.getPersianYear())));
+            getPersianNumbers(String.valueOf(mPersianCalendar.getPersianYear())));
 
     // Accessibility.
     long millis = mPersianCalendar.getTimeInMillis();
     mAnimator.setDateMillis(millis);
     String monthAndDayText = LanguageUtils.getPersianNumbers(
-      mPersianCalendar.getPersianMonthName() + " " +
-        mPersianCalendar.getPersianDay()
+            mPersianCalendar.getPersianMonthName() + " " +
+                    mPersianCalendar.getPersianDay()
     );
     mMonthAndDayView.setContentDescription(monthAndDayText);
 
     if (announce) {
       String fullDateText = LanguageUtils.
-        getPersianNumbers(mPersianCalendar.getPersianLongDate());
+              getPersianNumbers(mPersianCalendar.getPersianLongDate());
       Utils.tryAccessibilityAnnounce(mAnimator, fullDateText);
     }
   }
@@ -444,7 +470,7 @@ public class DatePickerDialog extends DialogFragment implements
   public void setFirstDayOfWeek(int startOfWeek) {
     if (startOfWeek < Calendar.SUNDAY || startOfWeek > Calendar.SATURDAY) {
       throw new IllegalArgumentException("Value must be between Calendar.SUNDAY and " +
-        "Calendar.SATURDAY");
+              "Calendar.SATURDAY");
     }
     mWeekStart = startOfWeek;
     if (mDayPickerView != null) {
@@ -593,7 +619,7 @@ public class DatePickerDialog extends DialogFragment implements
   public void onYearSelected(int year) {
     adjustDayInMonthIfNeeded(mPersianCalendar.getPersianMonth(), year);
     mPersianCalendar.setPersianDate(year, mPersianCalendar.getPersianMonth(),
-      mPersianCalendar.getPersianDay());
+            mPersianCalendar.getPersianDay());
     updatePickers();
     setCurrentView(MONTH_AND_DAY_VIEW);
     updateDisplay(true);

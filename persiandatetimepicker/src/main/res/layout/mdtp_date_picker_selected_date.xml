@@ -27,37 +27,43 @@
 
     <com.spisoft.persiandatetimepicker.AccessibleLinearLayout
         android:id="@+id/date_picker_month_and_day"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:clickable="true"
-        android:orientation="vertical"
-        android:textColor="@color/mdtp_date_picker_selector" >
+        android:layoutDirection="ltr"
+        android:orientation="horizontal"
+        android:textColor="@color/mdtp_date_picker_selector">
 
         <TextView
             android:id="@+id/date_picker_month"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:duplicateParentState="true"
-            android:gravity="center_horizontal|bottom"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="-10dip"
             android:includeFontPadding="false"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
             android:textColor="@color/mdtp_date_picker_selector"
             android:textSize="@dimen/mdtp_selected_date_month_size"
-            tools:text="May"/>
+            tools:text="May" />
 
         <TextView
             android:id="@+id/date_picker_day"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="78dp"
             android:layout_gravity="center"
-            android:layout_marginBottom="-10dip"
             android:layout_marginTop="-10dip"
+            android:layout_marginBottom="-10dip"
             android:duplicateParentState="true"
             android:gravity="center"
             android:includeFontPadding="false"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
             android:textColor="@color/mdtp_date_picker_selector"
             android:textSize="@dimen/mdtp_selected_date_day_size"
-            tools:text="15"/>
+            tools:text="15" />
     </com.spisoft.persiandatetimepicker.AccessibleLinearLayout>
 
     <com.spisoft.persiandatetimepicker.AccessibleTextView
@@ -67,8 +73,9 @@
         android:layout_gravity="center"
         android:gravity="center_horizontal|top"
         android:includeFontPadding="false"
-        android:textColor="@color/mdtp_date_picker_selector"
+        android:textColor="@color/mdtp_date_picker_selector_2"
         android:textSize="@dimen/mdtp_selected_date_year_size"
         tools:text="2015" />
+
 
 </LinearLayout>

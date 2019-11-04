@@ -158,7 +158,7 @@ public class PersianCalendar extends GregorianCalendar {
    */
   public String getPersianShortDate() {
     return "" + formatToMilitary(this.persianYear) + delimiter
-      + formatToMilitary(getPersianMonth()) + delimiter
+      + formatToMilitary(this.persianMonth+1) + delimiter
       + formatToMilitary(this.persianDay);
   }
 

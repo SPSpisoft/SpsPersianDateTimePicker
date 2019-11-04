@@ -48,12 +48,27 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
                 datePickerDialog.show(getFragmentManager(), "MyTag");
             }
         });
+
+        textView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                PersianCalendar persianCalendar0 = new PersianCalendar();
+                textView.setText(persianCalendar0.getPersianShortDate());
+                return false;
+            }
+        });
     }
 
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
                 String mDate = year + "/" + (monthOfYear+1) + "/" + dayOfMonth;
                 textView.setText(mDate);
+    }
+
+    @Override
+    public void onDateSet(DatePickerDialog view, String year, String monthOfYear, String dayOfMonth) {
+        String mDate = year + "/" + monthOfYear + "/" + dayOfMonth;
+        textView.setText(mDate);
     }
 
     @Override

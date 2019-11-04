@@ -20,6 +20,7 @@
     <string name="mdtp_done_label" msgid="7007948707597430919">"انجام شد"</string>
     <string name="mdtp_ok">تأیید</string>
     <string name="mdtp_cancel">انصراف</string>
+    <string name="mdtp_today">امروز</string>
     <!--
          Content description for the hour selector in the time picker, which displays
          selectable hours of the day along the inside edge of a circle, as in an analog clock.
